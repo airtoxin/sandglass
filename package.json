@@ -4,7 +4,7 @@
   "description": "time windowed event batching",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -R Nyan --recursive test"
   },
   "keywords": [
     "stream",
@@ -14,6 +14,9 @@
   "author": "airtoxin <airtoxin@icloud.com>",
   "license": "MIT",
   "dependencies": {
-    "eventemitter2": "^0.4.14"
+    "eventemitter2": "^0.4.14",
+    "lodash": "^3.3.1",
+    "mocha": "^2.1.0",
+    "power-assert": "^0.10.2"
   }
 }
