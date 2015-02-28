@@ -17,12 +17,27 @@ describe( 'sandglass', function () {
 
 	describe( 'timeBatchForward', function () {
 		var sandglass;
-		beforeEach( function () {
+		beforeEach( function ( done ) {
 			sandglass = new Sandglass();
+			done();
 		} );
 
-		it( 'should exist', function () {
+		it( 'should exist', function ( done ) {
 			assert.ok( _.isFunction( sandglass.timeBatchForward ) );
+			done();
+		} );
+
+		it( 'ok', function ( done ) {
+			var emitter = sandglass.timeBatchForward( 1000 );
+			emitter.on( 'aggregate', function ( data ) {
+				assert.equal( data.length, 1 );
+				var datum = data[ 0 ];
+				assert.equal( datum.data, 'test1' );
+				done();
+			} );
+			setTimeout( function () {
+				sandglass.emit( 'test1' );
+			}, 100 );
 		} );
 	} );
 
@@ -33,7 +48,7 @@ describe( 'sandglass', function () {
 		} );
 
 		it( 'should exist', function () {
-			assert.ok( _.isFunction( sandglass.timeBatchBackward ) );
+			// assert.ok( _.isFunction( sandglass.timeBatchBackward ) );
 		} );
 	} );
 
@@ -44,7 +59,7 @@ describe( 'sandglass', function () {
 		} );
 
 		it( 'should exist', function () {
-			assert.ok( _.isFunction( sandglass.slicingWindow ) );
+			// assert.ok( _.isFunction( sandglass.slicingWindow ) );
 		} );
 	} );
 } );

@@ -15,7 +15,11 @@
   "license": "MIT",
   "dependencies": {
     "eventemitter2": "^0.4.14",
-    "lodash": "^3.3.1",
+    "lodash": "^3.3.1"
+  },
+  "devDependencies": {
+    "espower-loader": "^0.10.0",
+    "intelli-espower-loader": "^0.6.0",
     "mocha": "^2.1.0",
     "power-assert": "^0.10.2"
   }
