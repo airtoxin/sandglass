@@ -10,8 +10,23 @@ describe( 'sandglass', function () {
 			sandglass = new Sandglass();
 		} );
 
-		it( 'should exist', function () {
+		it( 'should exist', function ( done ) {
 			assert.ok( _.isFunction( sandglass.emit ) );
+			done();
+		} );
+
+		it( 'should call _stream.emit', function ( done ) {
+			var dummy = 'Neko'
+			var _stream = {
+				emit: function ( event, data ) {
+					assert.equal( event, 'data' );
+					assert.equal( data.data, dummy );
+					assert.ok( data.timestamp );
+					done();
+				}
+			};
+			sandglass._stream = _stream;
+			sandglass.emit( dummy );
 		} );
 	} );
 
