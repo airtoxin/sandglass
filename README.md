@@ -1,4 +1,4 @@
-#sandglass
+#sandglass[WIP]
 Time windowed event batching.
 
 
