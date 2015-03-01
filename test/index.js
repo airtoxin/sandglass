@@ -25,6 +25,7 @@ describe( 'sandglass', function () {
 					done();
 				}
 			};
+
 			sandglass._stream = _stream;
 			sandglass.emit( dummy );
 		} );
@@ -42,17 +43,36 @@ describe( 'sandglass', function () {
 			done();
 		} );
 
-		it( 'ok', function ( done ) {
-			var emitter = sandglass.timeBatchForward( 1000 );
-			emitter.on( 'aggregate', function ( data ) {
-				assert.equal( data.length, 1 );
-				var datum = data[ 0 ];
-				assert.equal( datum.data, 'test1' );
+		it( 'should call _stream.on', function ( done ) {
+			var _stream = {
+				on: function ( event, handler ) {
+					assert.equal( event, 'data' );
+					assert.ok( _.isFunction( handler ) );
+					done();
+				}
+			};
+
+			sandglass._stream = _stream;
+			sandglass.timeBatchForward( 10 );
+		} );
+
+		it( 'should call _TBFDataHandler in #onData', function ( done ) {
+			var dummyData = 'Neko';
+			var testTimespan = 12;
+			var _TBFDataHandler = function ( data, timespan ) {
+				assert.equal( data, dummyData );
+				assert.equal( timespan, testTimespan );
 				done();
-			} );
-			setTimeout( function () {
-				sandglass.emit( 'test1' );
-			}, 100 );
+			};
+			var _stream = {
+				on: function ( event, handler ) {
+					handler( dummyData );
+				}
+			}
+
+			sandglass._stream = _stream;
+			sandglass._TBFDataHandler = _TBFDataHandler;
+			sandglass.timeBatchForward( testTimespan );
 		} );
 	} );
 

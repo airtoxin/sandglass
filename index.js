@@ -15,24 +15,27 @@ var Sandglass = ( function () {
 		};
 
 		self.timeBatchForward = function ( timespan ) {
-
 			var sandglassEmitter = new EventEmitter();
 
-			self._stream.on( 'data', function ( initialData ) {
-				var queue = new TBFQueue( timespan );
-				var emit = function ( data ) {
-					queue.emit( data );
-				};
-				emit( initialData );
-				self._stream.on( 'data', emit );
-
-				queue.on( 'aggregate', function ( data ) {
-					self._stream.off( 'data', emit );
-					sandglassEmitter.emit( 'aggregate', data );
-				} );
+			self._stream.on( 'data', function ( data ) {
+				self._TBFDataHandler( data, timespan );
 			} );
 
 			return sandglassEmitter;
+		};
+
+		self._TBFDataHandler = function ( initialData, timespan ) {
+			var queue = new TBFQueue( timespan );
+			var emit = function ( data ) {
+				queue.emit( data );
+			};
+			emit( initialData );
+			self._stream.on( 'data', emit );
+
+			queue.on( 'aggregate', function ( data ) {
+				self._stream.off( 'data', emit );
+				sandglassEmitter.emit( 'aggregate', data );
+			} );
 		};
 
 		self.timeBatchBackward = function ( timespan ) {
