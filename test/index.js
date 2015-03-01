@@ -7,8 +7,9 @@ var Sandglass = require( '../' );
 describe( 'sandglass', function () {
 	describe( 'emit', function () {
 		var sandglass;
-		beforeEach( function () {
+		beforeEach( function ( done ) {
 			sandglass = new Sandglass();
+			done();
 		} );
 
 		it( 'should exist', function ( done ) {
@@ -79,8 +80,9 @@ describe( 'sandglass', function () {
 
 	describe( '_TBFDataHandler', function () {
 		var sandglass;
-		beforeEach( function () {
+		beforeEach( function ( done ) {
 			sandglass = new Sandglass();
+			done();
 		} );
 
 		it( 'should call _stream on', function ( done ) {
@@ -124,10 +126,58 @@ describe( 'sandglass', function () {
 		} );
 	} );
 
+	describe( 'join timeBatchForward, _TBFDataHandler and emit', function () {
+		var sandglass;
+		beforeEach( function ( done ) {
+			sandglass = new Sandglass();
+			done();
+		} );
+
+		it( 'should aggregate 5 times', function ( done ) {
+			var sandglassEmitter = sandglass.timeBatchForward( 1000 );
+
+			var count = 5
+			sandglassEmitter.on( 'aggregate', function ( data ) {
+				// first time aggregate:  [ { timestamp: 1412, data: 'a' }, ... { timestamp: 1566, data: 'e' } ]
+				// second time aggregate: [ { timestamp: 1435, data: 'b' }, ... { timestamp: 1566, data: 'e' } ]
+				// and more
+				assert.equal( data.length, count );
+				assert.deepEqual( _.pluck( data, 'data' ), _.slice( [ 'a', 'b', 'c', 'd', 'e' ], 5 - count ) );
+				count--;
+				if ( count == 0 ) done();
+			} );
+
+			setTimeout( function () { sandglass.emit( 'a' ); }, 100 );
+			setTimeout( function () { sandglass.emit( 'b' ); }, 200 );
+			setTimeout( function () { sandglass.emit( 'c' ); }, 300 );
+			setTimeout( function () { sandglass.emit( 'd' ); }, 400 );
+			setTimeout( function () { sandglass.emit( 'e' ); }, 500 );
+		} );
+
+		it( 'should aggregate 4 times', function ( done ) {
+			var sandglassEmitter = sandglass.timeBatchForward( 1000 );
+
+			var count = 4
+			sandglassEmitter.on( 'aggregate', function ( data ) {
+				assert.equal( data.length, count );
+				assert.deepEqual( _.pluck( data, 'data' ), _.slice( [ 'a', 'b', 'c', 'd' ], 4 - count ) );
+				count--;
+				if ( count == 0 ) done();
+			} );
+
+			setTimeout( function () { sandglass.emit( 'a' ); }, 1 );
+			setTimeout( function () { sandglass.emit( 'b' ); }, 2 );
+			setTimeout( function () { sandglass.emit( 'c' ); }, 3 );
+			setTimeout( function () { sandglass.emit( 'd' ); }, 4 );
+			setTimeout( function () { sandglass.emit( 'e' ); }, 1500 );
+		} );
+	} );
+
 	describe( 'timeBatchBackward', function () {
 		var sandglass;
-		beforeEach( function () {
+		beforeEach( function ( done ) {
 			sandglass = new Sandglass();
+			done();
 		} );
 
 		it( 'should exist', function () {
@@ -137,8 +187,9 @@ describe( 'sandglass', function () {
 
 	describe( 'slicingWindow', function () {
 		var sandglass;
-		beforeEach( function () {
+		beforeEach( function ( done ) {
 			sandglass = new Sandglass();
+			done();
 		} );
 
 		it( 'should exist', function () {
