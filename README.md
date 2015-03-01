@@ -31,7 +31,7 @@ __Arguments__
 
 __Returns__
 
-(sandglassEmitter): emitter fire `aggregate` events on complete batch aggregation. 
+(sandglassStream): emitter fire `aggregate` events on complete batch aggregation. 
 `emitter.on( 'aggregate', callback );` 
 callback get array of object. 
 Object has `timestamp` and `data` field.
@@ -50,7 +50,7 @@ __Arguments__
 
 __Returns__
 
-(sandglassEmitter): emitter fire `aggregate` events on complete batch aggregation. 
+(sandglassStream): emitter fire `aggregate` events on complete batch aggregation. 
 `emitter.on( 'aggregate', callback );` 
 callback get array of object. 
 Object has `timestamp` and `data` field.
@@ -67,7 +67,7 @@ __Arguments__
 
 __Returns__
 
-(sandglassEmitter): emitter fire `aggregate` events on complete batch aggregation. 
+(sandglassStream): emitter fire `aggregate` events on complete batch aggregation. 
 `emitter.on( 'aggregate', callback );` 
 callback get array of object. 
 Object has `timestamp` and `data` field.
@@ -76,15 +76,15 @@ Object has `timestamp` and `data` field.
 
 
 
-#SandglassEmitter Instance method
+#SandglassStream Instance method
 
 ##on( event, listener );
 イベントハンドラの設置を行う。
-`sandglassEmitter.on( 'aggregate', function( data[] ) {...} )`
+`sandglassStream.on( 'aggregate', function( data[] ) {...} )`
 
 __Arguments__
 
-1. event(String): Event name of what you want. sandglassEmitter fires 'aggregation' event.
+1. event(String): Event name of what you want. sandglassStream fires 'aggregation' event.
 2. listener(Function): Event handler function. this get data array
 
 
@@ -94,5 +94,5 @@ __Arguments__
 
 __Arguments__
 
-1. event(String): Event name of what you want. sandglassEmitter fires 'aggregation' event.
+1. event(String): Event name of what you want. sandglassStream fires 'aggregation' event.
 2. listener(Function): Event handler function
