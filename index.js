@@ -18,13 +18,13 @@ var Sandglass = ( function () {
 			var sandglassEmitter = new EventEmitter();
 
 			self._stream.on( 'data', function ( data ) {
-				self._TBFDataHandler( data, timespan );
+				self._TBFDataHandler( data, timespan, sandglassEmitter );
 			} );
 
 			return sandglassEmitter;
 		};
 
-		self._TBFDataHandler = function ( initialData, timespan ) {
+		self._TBFDataHandler = function ( initialData, timespan, sandglassEmitter ) {
 			var queue = new TBFQueue( timespan );
 			var emit = function ( data ) {
 				queue.emit( data );
