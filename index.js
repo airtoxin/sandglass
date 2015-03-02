@@ -13,10 +13,10 @@ var Sandglass = ( function () {
 
 		self.absoluteSlice = function ( timespan ) {
 			var queue = [];
-			var sandglassStream = new EventEmitter();
+			var sandStream = new EventEmitter();
 
 			var interval = setInterval( function () {
-				sandglassStream.emit( 'aggregate', queue );
+				sandStream.emit( 'aggregate', queue );
 				queue = [];
 			}, timespan );
 
@@ -24,31 +24,31 @@ var Sandglass = ( function () {
 				queue.push( data );
 			} );
 
-			sandglassStream.stop = function () {
+			sandStream.stop = function () {
 				clearInterval( interval );
 			};
 
-			return sandglassStream;
+			return sandStream;
 		};
 
 		self.relativeSlice = function ( timespan ) {
-			var sandglassStream = new EventEmitter();
+			var sandStream = new EventEmitter();
 			var queue = [];
 
 			var timeout;
 			self._stream.on( 'data', function ( data ) {
 				queue.push( data );
 				timeout = setTimeout( function () {
-					sandglassStream.emit( 'aggregate', queue );
+					sandStream.emit( 'aggregate', queue );
 					queue = _.slice( queue, 1 );
 				}, timespan );
 			} );
 
-			sandglassStream.stop = function () {
+			sandStream.stop = function () {
 				clearTimeout( timeout );
 			};
 
-			return sandglassStream;
+			return sandStream;
 		};
 	};
 }() );

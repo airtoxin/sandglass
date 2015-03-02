@@ -42,40 +42,40 @@ describe( 'sandglass', function () {
 			done();
 		} );
 
-		it( 'should return sandglassStream (EventEmitter2 instance)', function ( done ) {
-			var sandglassStream = sandglass.absoluteSlice( 10000 );
-			assert.ok( sandglassStream instanceof EventEmitter );
+		it( 'should return sandStream (EventEmitter2 instance)', function ( done ) {
+			var sandStream = sandglass.absoluteSlice( 10000 );
+			assert.ok( sandStream instanceof EventEmitter );
 			done();
 		} );
 
-		it( 'sandglassStream has stop method', function ( done ) {
-			var sandglassStream = sandglass.absoluteSlice( 10000 );
-			assert.ok( _.isFunction( sandglassStream.stop ) );
+		it( 'sandStream has stop method', function ( done ) {
+			var sandStream = sandglass.absoluteSlice( 10000 );
+			assert.ok( _.isFunction( sandStream.stop ) );
 			done();
 		} );
 
 		it( 'join', function ( done ) {
-			var sandglassStream = sandglass.absoluteSlice( 500 );
+			var sandStream = sandglass.absoluteSlice( 500 );
 			var count = 0;
 			var callbacks = [
-				function ( data ) {
-					assert.deepEqual( data, [ { a: '100' }, { b: '300' } ] );
+				function ( agg ) {
+					assert.deepEqual( agg, [ { a: '100' }, { b: '300' } ] );
 					count++;
 				},
-				function ( data ) {
-					assert.deepEqual( data, [ { c: '600' }, { d: '900' }, { e: '910' } ] );
+				function ( agg ) {
+					assert.deepEqual( agg, [ { c: '600' }, { d: '900' }, { e: '910' } ] );
 					count++;
 				},
-				function ( data ) {
-					assert.deepEqual( data, [] );
+				function ( agg ) {
+					assert.deepEqual( agg, [] );
 					count++;
 					done();
 				},
 				function () {/* do nothing */}
 			];
 
-			sandglassStream.on( 'aggregate', function ( data ) {
-				callbacks[ count ]( data );
+			sandStream.on( 'aggregate', function ( agg ) {
+				callbacks[ count ]( agg );
 			} );
 
 			setTimeout( function(){ sandglass.emit( { a: '100' } ) }, 100 );
@@ -98,47 +98,47 @@ describe( 'sandglass', function () {
 			done();
 		} );
 
-		it( 'should return sandglassStream (EventEmitter2 instance)', function ( done ) {
-			var sandglassStream = sandglass.relativeSlice( 10000 );
-			assert.ok( sandglassStream instanceof EventEmitter );
+		it( 'should return sandStream (EventEmitter2 instance)', function ( done ) {
+			var sandStream = sandglass.relativeSlice( 10000 );
+			assert.ok( sandStream instanceof EventEmitter );
 			done();
 		} );
 
-		it( 'sandglassStream has stop method', function ( done ) {
-			var sandglassStream = sandglass.relativeSlice( 10000 );
-			assert.ok( _.isFunction( sandglassStream.stop ) );
+		it( 'sandStream has stop method', function ( done ) {
+			var sandStream = sandglass.relativeSlice( 10000 );
+			assert.ok( _.isFunction( sandStream.stop ) );
 			done();
 		} );
 
 		it( 'join', function ( done ) {
-			var sandglassStream = sandglass.relativeSlice( 100 );
+			var sandStream = sandglass.relativeSlice( 100 );
 			var count = 0;
 			var callbacks = [
-				function ( data ) {
-					assert.deepEqual( data, [ { a: '10' }, { b: '60' }, { c: '90' } ] );
+				function ( agg ) {
+					assert.deepEqual( agg, [ { a: '10' }, { b: '60' }, { c: '90' } ] );
 					count++;
 				},
-				function ( data ) {
-					assert.deepEqual( data, [ { b: '60' }, { c: '90' } ] );
+				function ( agg ) {
+					assert.deepEqual( agg, [ { b: '60' }, { c: '90' } ] );
 					count++;
 				},
-				function ( data ) {
-					assert.deepEqual( data, [ { c: '90' }, { d: '170' } ] );
+				function ( agg ) {
+					assert.deepEqual( agg, [ { c: '90' }, { d: '170' } ] );
 					count++;
 				},
-				function ( data ) {
-					assert.deepEqual( data, [ { d: '170' } ] );
+				function ( agg ) {
+					assert.deepEqual( agg, [ { d: '170' } ] );
 					count++;
 				},
-				function ( data ) {
-					assert.deepEqual( data, [ { e: '350' } ] );
+				function ( agg ) {
+					assert.deepEqual( agg, [ { e: '350' } ] );
 					count++;
 					done();
 				}
 			];
 
-			sandglassStream.on( 'aggregate', function ( data ) {
-				callbacks[ count ]( data );
+			sandStream.on( 'aggregate', function ( agg ) {
+				callbacks[ count ]( agg );
 			} );
 
 			setTimeout( function(){ sandglass.emit( { a: '10' } ) }, 10 );

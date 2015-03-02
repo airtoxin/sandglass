@@ -12,10 +12,10 @@ var sandglass = new Sandglass();
 
 
 
-#Sandglass Instance Methods
+#Sandglass
 
 ##emit( data );
-Send data to all SandglassStreams.
+Send data to all SandStreams.
 
 ##absoluteSlice( timespan );
 
@@ -29,14 +29,14 @@ __Arguments__
 
 __Returns__
 
-(sandglassStream): Fires `aggregate` event after stream aggregation.
+(sandStream): Fires `aggregate` event after stream aggregation.
 `emitter.on( 'aggregate', callback );` 
 `callback` gets an array of streaming data.
 
 __Example__
 
 ```javascript
-var sandglassStream = sandglass.absoluteSlice( 1000 );
+var sandStream = sandglass.absoluteSlice( 1000 );
 
 setTimeout( function() { sandglass.emit( 1 ) }, 500 );
 setTimeout( function() { sandglass.emit( 2 ) }, 800 );
@@ -45,8 +45,8 @@ setTimeout( function() { sandglass.emit( 4 ) }, 2100 );
 setTimeout( function() { sandglass.emit( 5 ) }, 2300 );
 setTimeout( function() { sandglass.emit( 6 ) }, 5000 );
 
-sandglassStream.on( 'aggregate', function ( data ) {
-    console.log( '@data:', data );
+sandStream.on( 'aggregate', function ( agg ) {
+    console.log( '@agg:', agg );
     // => [ 1, 2, 3 ] (5 second later)
     // => [ 4, 5 ] (10 second later)
     // => [ 6 ] (15 second later)
@@ -67,14 +67,14 @@ __Arguments__
 
 __Returns__
 
-(sandglassStream): Fires `aggregate` event after stream aggregation.
+(sandStream): Fires `aggregate` event after stream aggregation.
 `emitter.on( 'aggregate', callback );` 
 `callback` gets an array of streaming data.
 
 __Example__
 
 ```javascript
-var sandglassStream = sandglass.absoluteSlice( 1000 );
+var sandStream = sandglass.absoluteSlice( 1000 );
 
 setTimeout( function() { sandglass.emit( 1 ) }, 500 );
 setTimeout( function() { sandglass.emit( 2 ) }, 800 );
@@ -83,8 +83,8 @@ setTimeout( function() { sandglass.emit( 4 ) }, 2100 );
 setTimeout( function() { sandglass.emit( 5 ) }, 2300 );
 setTimeout( function() { sandglass.emit( 6 ) }, 5000 );
 
-sandglassStream.on( 'aggregate', function ( data ) {
-    console.log( '@data:', data );
+sandStream.on( 'aggregate', function ( agg ) {
+    console.log( '@agg:', agg );
     // => [ 1, 2 ] ( 1.5 second later )
     // => [ 2, 3 ] ( 1.8 second later )
     // => [ 3, 4, 5 ] ( 2.7 second later )
@@ -96,12 +96,12 @@ sandglassStream.on( 'aggregate', function ( data ) {
 
 
 
-#SandglassStream Instance Methods
+#SandStream
 
 ##on( event, listener );
 
 Set event listener.
-`sandglassStream.on( 'aggregate', function( agg ) {...} )`
+`sandStream.on( 'aggregate', function( agg ) {...} )`
 
 ##off( event, listener );
 
