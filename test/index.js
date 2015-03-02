@@ -16,6 +16,18 @@ describe( 'sandglass', function () {
 			assert.ok( _.isFunction( sandglass.emit ) );
 			done();
 		} );
+
+		it( 'should call _stream.emit', function ( done ) {
+			var testData = 'this is test data';
+			var _stream = { emit: function ( event, data ) {
+				assert.equal( event, 'data' );
+				assert.equal( data, testData );
+				done();
+			} };
+
+			sandglass._stream = _stream;
+			sandglass.emit( testData );
+		} );
 	} );
 
 	describe( 'absoluteSlice', function () {

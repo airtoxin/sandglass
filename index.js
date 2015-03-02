@@ -5,10 +5,10 @@ var EventEmitter = require( 'eventemitter2' ).EventEmitter2;
 var Sandglass = ( function () {
 	return function () {
 		var self = this;
-		var stream = new EventEmitter();
+		self._stream = new EventEmitter();
 
 		self.emit = function ( data ) {
-			stream.emit( 'data', data );
+			self._stream.emit( 'data', data );
 		};
 
 		self.absoluteSlice = function ( timespan ) {
@@ -20,7 +20,7 @@ var Sandglass = ( function () {
 				queue = [];
 			}, timespan );
 
-			stream.on( 'data', function ( data ) {
+			self._stream.on( 'data', function ( data ) {
 				queue.push( data );
 			} );
 
@@ -36,7 +36,7 @@ var Sandglass = ( function () {
 			var queue = [];
 
 			var timeout;
-			stream.on( 'data', function ( data ) {
+			self._stream.on( 'data', function ( data ) {
 				queue.push( data );
 				timeout = setTimeout( function () {
 					sandglassStream.emit( 'aggregate', queue );
