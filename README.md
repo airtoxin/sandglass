@@ -1,5 +1,5 @@
 #sandglass[WIP]
-Time windowed event batching.
+Time windowed stream aggregation.
 
 
 
@@ -15,84 +15,97 @@ var sandglass = new Sandglass();
 #Sandglass Instance Methods
 
 ##emit( data );
-バッチに掛けるデータを送信する。
+Send data to all SandglassStreams.
 
+##absoluteSlice( timespan );
 
-##timeBatchForward( timespan );
-![](doc/img/time_batch_forward.png)
-このメソッドは新しいデータが到達した時点からtimespanだけ未来までの間に含まれるデータを返す。
-実際には、データが到達した時点で集計を開始し、timespanだけ時間が経つと集計を終えてデータを返すので、timespanだけ遅延してデータが送られる。
-When new data incoming, this method starts aggregation of data.
-Aggregation completed over time that you specified in the `timespan`, and aggregated events will fire.
+This slices streaming timeline by timespan and aggregate data in each slices.
 
 __Arguments__
 
-1. timespan(Number): batch aggregation time (millisecond).
+1. timespan(Number): aggregation time (millisecond).
 
 __Returns__
 
-(sandglassStream): emitter fire `aggregate` events on complete batch aggregation. 
+(sandglassStream): stream fires `aggregate` event on complete stream aggregation.
 `emitter.on( 'aggregate', callback );` 
-callback get array of object. 
-Object has `timestamp` and `data` field.
+callback get array of streaming data.
 
+__Example__
 
-##timeBatchBackward( timespan );
-![](doc/img/time_batch_backward.png)
-このメソッドは`timeBatchBackward`とは逆に、新しいデータが到達した時点からtimespanだけ過去までの間に含まれたデータを返す。
-既にあるデータに対して集計を行うため、`timeBatchForward`の様に大きな遅延は発生しない。
-When new data incoming, this method starts aggregation(picking).
-Aggregation completed over time that you specified in the `timespan`, and aggregated events will fire.
+```javascript
+var sandglassStream = sandglass.absoluteSlice( 1000 );
+
+setTimeout( function() { sandglass.emit( 1 ) }, 500 );
+setTimeout( function() { sandglass.emit( 2 ) }, 800 );
+setTimeout( function() { sandglass.emit( 3 ) }, 1700 );
+setTimeout( function() { sandglass.emit( 4 ) }, 2100 );
+setTimeout( function() { sandglass.emit( 5 ) }, 2300 );
+setTimeout( function() { sandglass.emit( 6 ) }, 5000 );
+
+sandglassStream.on( 'aggregate', function ( data ) {
+    console.log( '@data:', data );
+    // => [ 1, 2, 3 ] (5 second later)
+    // => [ 4, 5 ] (10 second later)
+    // => [ 6 ] (15 second later)
+    // => [] (20 second later)
+    // ...
+} );
+```
+
+##relativeSlice( timespan );
+
+Data relative timeline slicing and aggregation.
+This slices streaming timeline by timespan at data incoming
 
 __Arguments__
 
-1. timespan(Number): batch aggregation time (millisecond).
+1. timespan(Number): aggregation time span (millisecond).
 
 __Returns__
 
-(sandglassStream): emitter fire `aggregate` events on complete batch aggregation. 
+(sandglassStream): stream fires `aggregate` event on complete stream aggregation.
 `emitter.on( 'aggregate', callback );` 
-callback get array of object. 
-Object has `timestamp` and `data` field.
+callback get array of streaming data.
 
+__Example__
 
-##slicingWindow( timespan );
-![](doc/img/slicing_window.png)
-このメソッドは時間軸を`timespan`の長さでスライスし、その間に含まれるデータを返す。
-時間軸のスライスはこのメソッドが実行された瞬間から始まり、`timespan`毎にデータが返されると同時に新しい時間軸のスライスが始まる。
+```javascript
+var sandglassStream = sandglass.absoluteSlice( 1000 );
 
-__Arguments__
+setTimeout( function() { sandglass.emit( 1 ) }, 500 );
+setTimeout( function() { sandglass.emit( 2 ) }, 800 );
+setTimeout( function() { sandglass.emit( 3 ) }, 1700 );
+setTimeout( function() { sandglass.emit( 4 ) }, 2100 );
+setTimeout( function() { sandglass.emit( 5 ) }, 2300 );
+setTimeout( function() { sandglass.emit( 6 ) }, 5000 );
 
-1. timespan(Number): batch aggregation time (millisecond).
-
-__Returns__
-
-(sandglassStream): emitter fire `aggregate` events on complete batch aggregation. 
-`emitter.on( 'aggregate', callback );` 
-callback get array of object. 
-Object has `timestamp` and `data` field.
-
-
+sandglassStream.on( 'aggregate', function ( data ) {
+    console.log( '@data:', data );
+    // => [ 1, 2 ] ( 1.5 second later )
+    // => [ 2, 3 ] ( 1.8 second later )
+    // => [ 3, 4, 5 ] ( 2.7 second later )
+    // => [ 4, 5 ] ( 3.1 second later )
+    // => [ 5 ] ( 3.3 second later )
+    // => [ 6 ] ( 6 second later )
+} );
+```
 
 
 
 #SandglassStream Instance method
 
 ##on( event, listener );
-イベントハンドラの設置を行う。
+
+Set event listener.
 `sandglassStream.on( 'aggregate', function( data[] ) {...} )`
 
-__Arguments__
-
-1. event(String): Event name of what you want. sandglassStream fires 'aggregation' event.
-2. listener(Function): Event handler function. this get data array
-
-
-
 ##off( event, [listener] );
-設置したイベントハンドラの削除を行う。
 
-__Arguments__
+Remove event listener.
 
-1. event(String): Event name of what you want. sandglassStream fires 'aggregation' event.
-2. listener(Function): Event handler function
+##stop();
+Stop aggregation. GC works.
+
+##other methods
+see [EventEmitter2](https://github.com/asyncly/EventEmitter2)

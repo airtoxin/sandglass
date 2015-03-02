@@ -1,49 +1,54 @@
+var _ = require( 'lodash' );
 var util = require( 'util' );
-var TBFQueue = require( './lib/tbf_queue' );
 var EventEmitter = require( 'eventemitter2' ).EventEmitter2;
 
 var Sandglass = ( function () {
 	return function () {
 		var self = this;
-		self._stream = new EventEmitter();
+		var stream = new EventEmitter();
 
 		self.emit = function ( data ) {
-			self._stream.emit( 'data', {
-				timestamp: Date.now(),
-				data: data
-			} );
+			stream.emit( 'data', data );
 		};
 
-		self.timeBatchForward = function ( timespan ) {
+		self.absoluteSlice = function ( timespan ) {
+			var queue = [];
 			var sandglassStream = new EventEmitter();
 
-			self._stream.on( 'data', function ( data ) {
-				self._TBFDataHandler( data, timespan, sandglassStream );
+			var interval = setInterval( function () {
+				sandglassStream.emit( 'aggregate', queue );
+				queue = [];
+			}, timespan );
+
+			stream.on( 'data', function ( data ) {
+				queue.push( data );
 			} );
+
+			sandglassStream.stop = function () {
+				clearInterval( interval );
+			};
 
 			return sandglassStream;
 		};
 
-		self._TBFDataHandler = function ( initialData, timespan, sandglassStream ) {
-			var queue = new TBFQueue( timespan );
-			var emit = function ( data ) {
-				queue.emit( data );
-			};
-			emit( initialData );
-			self._stream.on( 'data', emit );
+		self.relativeSlice = function ( timespan ) {
+			var sandglassStream = new EventEmitter();
+			var queue = [];
 
-			queue.on( 'aggregate', function ( data ) {
-				self._stream.off( 'data', emit );
-				sandglassStream.emit( 'aggregate', data );
+			var timeout;
+			stream.on( 'data', function ( data ) {
+				queue.push( data );
+				timeout = setTimeout( function () {
+					sandglassStream.emit( 'aggregate', queue );
+					queue = _.slice( queue, 1 );
+				}, timespan );
 			} );
-		};
 
-		self.timeBatchBackward = function ( timespan ) {
-			// body...
-		};
+			sandglassStream.stop = function () {
+				clearTimeout( timeout );
+			};
 
-		self.slicingWindow = function ( timespan ) {
-			// body...
+			return sandglassStream;
 		};
 	};
 }() );

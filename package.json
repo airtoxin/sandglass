@@ -1,7 +1,7 @@
 {
   "name": "sandglass",
   "version": "0.0.1",
-  "description": "time windowed event batching",
+  "description": "Time windowed stream aggregation",
   "main": "index.js",
   "scripts": {
     "test": "mocha -R Nyan --recursive test"
@@ -9,7 +9,8 @@
   "keywords": [
     "stream",
     "event",
-    "batch"
+    "batch",
+    "aggregate"
   ],
   "author": "airtoxin <airtoxin@icloud.com>",
   "license": "MIT",
