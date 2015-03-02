@@ -1,11 +1,11 @@
 #sandglass[WIP]
-Time windowed stream aggregation.
+Aggregates data stream timeline as time window.
 
 
 
 #Usage
 
-```
+```javascript
 var Sandglass = require( 'sandglass' );
 var sandglass = new Sandglass();
 ```
@@ -19,17 +19,19 @@ Send data to all SandglassStreams.
 
 ##absoluteSlice( timespan );
 
-This slices streaming timeline by timespan and aggregate data in each slices.
+Slices data stream timeline with timespan and aggregates each slice of data stream. Next aggregation starts after one aggregation ends, and another one starts again and again.
+
+![](doc/img/absoluteSlice.jpg)
 
 __Arguments__
 
-1. timespan(Number): aggregation time (millisecond).
+1. timespan(Number): slice size (millisecond).
 
 __Returns__
 
-(sandglassStream): stream fires `aggregate` event on complete stream aggregation.
+(sandglassStream): Fires `aggregate` event after stream aggregation.
 `emitter.on( 'aggregate', callback );` 
-callback get array of streaming data.
+`callback` gets an array of streaming data.
 
 __Example__
 
@@ -55,18 +57,19 @@ sandglassStream.on( 'aggregate', function ( data ) {
 
 ##relativeSlice( timespan );
 
-Data relative timeline slicing and aggregation.
-This slices streaming timeline by timespan at data incoming
+Slices data stream timeline with timespan and aggregates each slice of data stream. The aggregation starts at each incoming data, and it ends after it takes the timespan. 
+
+![](doc/img/relativeSlice.jpg)
 
 __Arguments__
 
-1. timespan(Number): aggregation time span (millisecond).
+1. timespan(Number): slice size (millisecond).
 
 __Returns__
 
-(sandglassStream): stream fires `aggregate` event on complete stream aggregation.
+(sandglassStream): Fires `aggregate` event after stream aggregation.
 `emitter.on( 'aggregate', callback );` 
-callback get array of streaming data.
+`callback` gets an array of streaming data.
 
 __Example__
 
@@ -93,14 +96,14 @@ sandglassStream.on( 'aggregate', function ( data ) {
 
 
 
-#SandglassStream Instance method
+#SandglassStream Instance Methods
 
 ##on( event, listener );
 
 Set event listener.
-`sandglassStream.on( 'aggregate', function( data[] ) {...} )`
+`sandglassStream.on( 'aggregate', function( agg ) {...} )`
 
-##off( event, [listener] );
+##off( event, listener );
 
 Remove event listener.
 
