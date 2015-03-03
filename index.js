@@ -71,6 +71,8 @@ var Sandglass = ( function () {
 
 			return sandStream;
 		};
+
+		self.delayedCount = self.relativeSlice;
 	};
 }() );
 

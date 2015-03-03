@@ -62,6 +62,7 @@ sandStream.on( 'aggregate', function ( agg ) {
 ##relativeSlice( timespan );
 
 Slices data stream timeline with timespan and aggregates each slice of data stream. The aggregation starts at each incoming data, and it ends after it takes the timespan. 
+(Same as delayedCount)
 
 ![](doc/img/relativeSlice.jpg)
 
@@ -119,6 +120,7 @@ __Returns__
 
 ##delayedCount( timespan );
 
+Aliase of relativeSlice (Same as relativeSlice).
 When data incomes, 'delayedCount' reserve the data.
 After it takes timespan, 'delayedCount' sends data as aggregation which was reserved untill at that time,
 and then the data is disposed.
