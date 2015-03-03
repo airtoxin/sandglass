@@ -50,6 +50,27 @@ var Sandglass = ( function () {
 
 			return sandStream;
 		};
+
+		var timeout;
+		self.liveCount = function ( timespan ) {
+			var sandStream = new EventEmitter();
+			var queue = [];
+
+			self._stream.on( 'data', function ( data ) {
+				queue.push( data );
+				sandStream.emit( 'aggregate', queue );
+
+				timeout = setTimeout( function () {
+					queue = _.slice( queue, 1 );
+				}, timespan );
+			} );
+
+			sandStream.stop = function () {
+				clearTimeout( timeout );
+			};
+
+			return sandStream;
+		};
 	};
 }() );
 

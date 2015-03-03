@@ -148,4 +148,67 @@ describe( 'sandglass', function () {
 			setTimeout( function(){ sandglass.emit( { e: '350' } ) }, 350 );
 		} );
 	} );
+
+	describe( 'liveCount', function () {
+		var sandglass;
+		beforeEach( function ( done ) {
+			sandglass = new Sandglass();
+			done();
+		} );
+
+		it( 'should exist', function ( done ) {
+			assert.ok( sandglass.liveCount );
+			done();
+		} );
+
+		it( 'should return sandStream (EventEmitter2 instance)', function ( done ) {
+			var sandStream = sandglass.liveCount( 10000 );
+			assert.ok( sandStream instanceof EventEmitter );
+			done();
+		} );
+
+		it( 'sandStream has stop method', function ( done ) {
+			var sandStream = sandglass.liveCount( 10000 );
+			assert.ok( _.isFunction( sandStream.stop ) );
+			done();
+		} );
+
+		it( 'join', function ( done ) {
+			var sandStream = sandglass.liveCount( 500 );
+			var count = 0;
+			var callbacks = [
+				function ( agg ) {
+					assert.deepEqual( agg, [ { a: '100' } ] );
+					count++;
+				},
+				function ( agg ) {
+					assert.deepEqual( agg, [ { a: '100' }, { b: '200' } ] );
+					count++;
+				},
+				function ( agg ) {
+					assert.deepEqual( agg, [ { a: '100' }, { b: '200' }, { c: '400' } ] );
+					count++;
+				},
+				function ( agg ) {
+					assert.deepEqual( agg, [ { c: '400' }, { d: '800' } ] );
+					count++;
+				},
+				function ( agg ) {
+					assert.deepEqual( agg, [ { d: '800' }, { e: '1000' } ] );
+					count++;
+					done();
+				}
+			];
+
+			sandStream.on( 'aggregate', function ( agg ) {
+				callbacks[ count ]( agg );
+			} );
+
+			setTimeout( function(){ sandglass.emit( { a: '100' } ) }, 100 );
+			setTimeout( function(){ sandglass.emit( { b: '200' } ) }, 200 );
+			setTimeout( function(){ sandglass.emit( { c: '400' } ) }, 400 );
+			setTimeout( function(){ sandglass.emit( { d: '800' } ) }, 800 );
+			setTimeout( function(){ sandglass.emit( { e: '1000' } ) }, 1000 );
+		} );
+	} );
 } );
