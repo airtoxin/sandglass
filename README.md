@@ -1,5 +1,7 @@
 #sandglass
 
+[![Build Status](https://travis-ci.org/airtoxin/sandglass.svg?branch=master)](https://travis-ci.org/airtoxin/sandglass)
+
 Aggregates data stream timeline as time window.
 
 
