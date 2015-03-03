@@ -1,8 +1,14 @@
-#sandglass
-
-[![Build Status](https://travis-ci.org/airtoxin/sandglass.svg?branch=master)](https://travis-ci.org/airtoxin/sandglass)
+#sandglass [![npm version](https://badge.fury.io/js/sandglass.svg)](http://badge.fury.io/js/sandglass) [![Build Status](https://travis-ci.org/airtoxin/sandglass.svg?branch=master)](https://travis-ci.org/airtoxin/sandglass)
 
 Aggregates data stream timeline as time window.
+
+
+
+#Install
+
+```javascript
+npm install sandglass
+```
 
 
 
@@ -15,7 +21,7 @@ var sandglass = new Sandglass();
 
 
 
-#Sandglass
+#Sandglass Instance Methods
 
 ##emit( data );
 
@@ -129,7 +135,7 @@ and then the data is disposed.
 
 
 
-#SandStream
+#SandStream Instance Methods
 
 ##on( event, listener );
 
