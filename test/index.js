@@ -1,4 +1,4 @@
-var assert = require( 'power-assert' );
+var assert = require( 'assert' );
 var _ = require( 'lodash' );
 var EventEmitter = require( 'eventemitter2' ).EventEmitter2;
 
