@@ -1,4 +1,4 @@
-#sandglass[WIP]
+#sandglass
 
 Aggregates data stream timeline as time window.
 
