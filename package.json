@@ -4,7 +4,7 @@
   "description": "Time windowed stream aggregation",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R Nyan --recursive test"
+    "test": "mocha --recursive test"
   },
   "repository": {
     "type": "git",
