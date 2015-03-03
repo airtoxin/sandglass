@@ -51,11 +51,11 @@ var Sandglass = ( function () {
 			return sandStream;
 		};
 
-		var timeout;
 		self.liveCount = function ( timespan ) {
 			var sandStream = new EventEmitter();
 			var queue = [];
 
+			var timeout;
 			self._stream.on( 'data', function ( data ) {
 				queue.push( data );
 				sandStream.emit( 'aggregate', queue );
