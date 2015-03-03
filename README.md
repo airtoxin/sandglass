@@ -1,4 +1,5 @@
 #sandglass[WIP]
+
 Aggregates data stream timeline as time window.
 
 
@@ -15,7 +16,9 @@ var sandglass = new Sandglass();
 #Sandglass
 
 ##emit( data );
+
 Send data to all SandStreams.
+
 
 ##absoluteSlice( timespan );
 
@@ -55,6 +58,7 @@ sandStream.on( 'aggregate', function ( agg ) {
 } );
 ```
 
+
 ##relativeSlice( timespan );
 
 Slices data stream timeline with timespan and aggregates each slice of data stream. The aggregation starts at each incoming data, and it ends after it takes the timespan. 
@@ -93,6 +97,31 @@ sandStream.on( 'aggregate', function ( agg ) {
     // => [ 6 ] ( 6 second later )
 } );
 ```
+
+
+##liveCount( timespan );
+
+When data incomes, 'liveCount' reserve the data.
+At the same time 'liveCount' sends data as aggregation which was reserved untill at that time.
+Each data is disposed after it takes timespan.
+
+![](doc/img/liveCount.jpg)
+
+__Arguments__
+
+1. timespan(Number): slice size (millisecond).
+
+__Returns__
+
+(sandStream): Fires `aggregate` event after stream aggregation.
+`emitter.on( 'aggregate', callback );`
+`callback` gets an array of reserved streaming data.
+
+##delayedCount( timespan );
+
+When data incomes, 'delayedCount' reserve the data.
+After it takes timespan, 'delayedCount' sends data as aggregation which was reserved untill at that time,
+and then the data is disposed.
 
 
 
