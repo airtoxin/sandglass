@@ -6,9 +6,7 @@ Aggregates data stream timeline as time window.
 
 #Install
 
-```javascript
-npm install sandglass
-```
+[![NPM](https://nodei.co/npm/sandglass.png)](https://npmjs.org/package/sandglass)
 
 
 
@@ -32,7 +30,7 @@ Send data to all SandStreams.
 
 Slices data stream timeline with timespan and aggregates each slice of data stream. Next aggregation starts after one aggregation ends, and another one starts again and again.
 
-![](doc/img/absoluteSlice.jpg)
+![absoluteSlice](doc/img/absoluteSlice.jpg)
 
 __Arguments__
 
@@ -72,7 +70,7 @@ sandStream.on( 'aggregate', function ( agg ) {
 Slices data stream timeline with timespan and aggregates each slice of data stream. The aggregation starts at each incoming data, and it ends after it takes the timespan. 
 (Same as delayedCount)
 
-![](doc/img/relativeSlice.jpg)
+![relativeSlice](doc/img/relativeSlice.jpg)
 
 __Arguments__
 
@@ -114,7 +112,7 @@ When data incomes, 'liveCount' reserve the data.
 At the same time 'liveCount' sends data as aggregation which was reserved untill at that time.
 Each data is disposed after it takes timespan.
 
-![](doc/img/liveCount.jpg)
+![liveCount](doc/img/liveCount.jpg)
 
 __Arguments__
 
