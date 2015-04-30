@@ -56,10 +56,10 @@ setTimeout( function() { sandglass.emit( 6 ) }, 5000 );
 
 sandStream.on( 'aggregate', function ( agg ) {
     console.log( '@agg:', agg );
-    // => [ 1, 2, 3 ] (5 second later)
-    // => [ 4, 5 ] (10 second later)
-    // => [ 6 ] (15 second later)
-    // => [] (20 second later)
+    // => [ 1, 2, 3 ] (1 second later)
+    // => [ 4, 5 ] (2 second later)
+    // => [ 6 ] (3 second later)
+    // => [] (6 second later)
     // ...
 } );
 ```
